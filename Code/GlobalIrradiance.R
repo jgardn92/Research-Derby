@@ -8,8 +8,6 @@
 #PAR (W/m2) to PAR (uE/s/m2) is 4.57
   #Citation for this method is McCree, 1972
 
-rm(list=ls())
-setwd("~/Desktop")
 
 #Load the packages
 install.packages("fishmethods") #For astrocalc4r 
@@ -26,7 +24,7 @@ library(fishmethods)
 help(fishmethods)
 
 #Load the data
-Name <- read.csv("Name.csv", header=TRUE)
+Name <- read.csv("Data/Name.csv", header=TRUE)
 
 #01 Jul 2013 through 31 Aug 2013
 #2013 through 2018 #Determine number of days in each

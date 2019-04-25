@@ -1,5 +1,11 @@
 # Functions
-# Literature reference for most equations: Vadeboncoeur et al. 2008 Ecology
+# Convert clear-sky irradiance to surface irradiance as a function of AOD
+
+clear_to_surface <- function(AOD, CS_PAR, B0 = -0.322868, B1 = -0.371085) {
+  return(CS_PAR * exp(B0 + AOD * B1))
+}
+
+# Literature reference for most equations: Sources/Vadeboncoeur et al. 2008 Ecology
 
 # Eq 4 ------------------------------------------------------------------------------------------------------------
 # Phytoplankton productivity (PP; mg Cm-3 s-1)
@@ -245,7 +251,7 @@ TPP_func <- function(PPdepth, A0 = 75713400) {
 }
 
 # Eqn 11 ------------------------------------------------------------------------------------------------------------
-# Periphyton: Austin and Hill 1991 Limno and Ocean
+# Periphyton: Sources/Austin and Hill 1991 Limno and Ocean
 #Ik is 217.5 umol photons/m2/s
 # BPmax: 50 mg C per meter per hour (convert to seconds) for mesotrophic lakes with unconsolidated sediments. 
 # daily benthic primary production, BP, at depth z (mg C)
@@ -261,5 +267,3 @@ TBP <- function(BPz, A0 = 75713400) {
   sum(BPz)/A0
 }
 
-  
-# Eqn 12 -------------------------------------------------------------------------------------------------------------
