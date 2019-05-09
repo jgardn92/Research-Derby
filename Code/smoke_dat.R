@@ -13,4 +13,4 @@ year <- year(dates)
 smoke_days2 <- cbind(smoke_days,julian_day, year)
 smoke_days2 <- smoke_days2[,2:5]
 
-saveRDS(smoke_days2,"Data/smoke_days.RDS")
+saveRDS(smoke_days2,"Output/smoke_days.RDS")

@@ -11,12 +11,13 @@
 # for things like chl a (e.g. convert values between 0 and -2 to 0; values less than -2 change to NA)
 # see website: https://green2.kingcounty.gov/lake-buoy/Parameters.aspx
 
+# 3. Calculate productivity using Vadeboncoeur equations from file RD_functions.R
+
 # Load libraries ---------------
 library(dplyr)
 source('Code/RD_functions.R')
 
 library(rLakeAnalyzer) # has function thermo.depth() to find thermocline with some bs check for unique depths
-source('Code/mod_thermo_depth_func.R')
 
 # packages chron or lubridate function yday
 library(lubridate)
@@ -87,16 +88,18 @@ str(AquaPAR.dates)
 AquaPARs <- AquaPAR.dates %>% mutate(hhour = hour + minute)
 str(AquaPARs)
 
-PAR_all <- inner_join(AquaPARs, PARcs_df, by = c("doy", "year", "hhour"))
+PARcs_df <- PARcs_df %>% mutate(doy = yday(D)) #Need to get more updated file from laptop 
+
+PAR_all <- inner_join(AquaPARs, PARcs_df, by = c("doy", "year", "hhour")) #PARcs_df comes from GlobalIrradiance.R file
 plot(PAR_all$PAR_particleFlux, PAR_all$PAR_surf_Flux)
 
 str(PAR_all)
 # PAR_all_day <- PAR_all[PAR_all$hhour >= PAR_all$sunrise + 0.5 & PAR_all$hhour <= PAR_all$sunset - 0.5,]
 PAR_all_day <- PAR_all[PAR_all$hhour >= 10 & PAR_all$hhour <= 14,]
 str(PAR_all_day)
-?write.csv
-# write.csv(PAR_all_day, file = "Data/PAR_all_day.csv", row.names = F, col.names = T)
-# saveRDS(PAR_all_day, file = "Data/PAR_all_day.rds")
+
+# write.csv(PAR_all_day, file = "Output/PAR_daylight_buoy.csv", row.names = F, col.names = T)
+# saveRDS(PAR_all_day, file = "Output/PAR_daylight_buoy.rds")
 
 # 2. QAQC WQ data
 WQ.QC <- WQ
@@ -107,6 +110,8 @@ colnames(WQ.QC) <- c("date", "depth", "temp", "sp_cond", "DO_conc", "DO_sat", "p
 str(WQ.QC)
 
 # QC chla
+# Replacing negative values with zero because negative values are outside the real range of chlorophyll values
+# Changes in values to min and max thresholds comes from the buoy sonde expected range values published on-line
 WQ.QC$chla[WQ.QC$chla <= 0 & WQ.QC$chla >= -2] <- 0
 WQ.QC$chla[WQ.QC$chla < (-2)] <- NA
 WQ.QC$chla[WQ.QC$chla >= 50]
