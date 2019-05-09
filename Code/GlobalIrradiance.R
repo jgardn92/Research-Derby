@@ -8,8 +8,6 @@
 #PAR (W/m2) to PAR (uE/s/m2) is 4.57
   #Citation for this method is McCree, 1972
 
-rm(list=ls())
-setwd("~/Desktop")
 
 #Load the packages
 install.packages("fishmethods") #For astrocalc4r 
@@ -25,8 +23,6 @@ install.packages("fishmethods") #For astrocalc4r
 library(fishmethods)
 help(fishmethods)
 
-#Load the data
-Name <- read.csv("Name.csv", header=TRUE)
 
 #01 Jul 2013 through 31 Aug 2013
 #2013 through 2018 #Determine number of days in each
@@ -61,6 +57,9 @@ data$PAR_particleFlux #Obs 997 = 6.86257287e+02
 data$dayLength <- (data$sunset - data$sunrise) * 60 * 60
 data$dayLength
 colnames(data) #Just to check...
+PARcs_df <- data # name used in LakeWA_WQ_meteor.R file for now
+
+saveRDS(PARcs_df,"Output/PAR_clear_sky.RDS")
 
 #PAR ratio correction for smoky days
 0.47-(0.035*(2.76*(2^-0.8))) #0.414517869 #Kobayashi et al., 2004
